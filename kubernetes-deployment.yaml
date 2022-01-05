@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spinnaker-test-pipeline-deployment
+  namespace: juanp-guitron-spin
+spec:
+  selector:
+    matchLabels:
+      app: spinnaker-test-pipeline
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: spinnaker-test-pipeline
+    spec:
+      containers:
+      - name: spinnaker-test-pipeline
+        image: ichi0915/spinnaker-test-pipeline:latest
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "100m"
+          limits:
+            memory: "64Mi"
+            cpu: "200m"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        ports:
+        - containerPort: 80
