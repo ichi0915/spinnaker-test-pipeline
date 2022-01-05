@@ -1,0 +1,23 @@
+name: Spinnaker-test
+
+on:
+  push:
+    branches: 
+    - "main" 
+  
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build and Push in Docker Hub
+      uses: mr-smithers-excellent/docker-build-push@v4
+      with:
+        image: ichi0915/spinnaker-test-pipeline
+        tag: latest
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
